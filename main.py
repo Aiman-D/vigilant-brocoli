@@ -6,9 +6,8 @@ from utils import create_output_directory
 from reporting import log_summary, save_results
 
 def signal_handler(sig, frame):
-    
+    global args  # Added
     print("\nProcess interrupted by user. Saving results and exiting...")
-        
     from config import global_results  
     save_results(global_results, args.output)  
     log_summary()
@@ -32,9 +31,10 @@ def main():
 
     try:
         
-        create_output_directory(args.url)
-        args.output = os.path.join(output_directory, args.output)
-   
+        output_directory = create_output_directory(args.url)  # Fix added
+        args.output = os.path.join(output_directory, args.output)  # Modified
+
+        from scanner import perform_scan  # Added to import perform_scan
         perform_scan(args)
     
         log_summary()
@@ -47,5 +47,4 @@ def main():
         log_summary()
 
 if __name__ == "__main__":
-    
     main()
